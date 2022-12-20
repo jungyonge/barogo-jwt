@@ -55,14 +55,6 @@ public class User {
 
     private LocalDateTime lastLoggedIn;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
-
     public void addRole(Role role) {
         if (this.roles.stream().anyMatch(r -> r.getId() == role.getId())) {
             throw new DomainValidationException(UserDomainValidationMessage.ROLE_ALREADY_EXIST);
@@ -111,10 +103,6 @@ public class User {
         this.lastLoggedIn = lastLoggedIn;
     }
 
-    private void setAuthorities(
-            Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
 
     private void setActivated(boolean activated) {
         this.activated = activated;

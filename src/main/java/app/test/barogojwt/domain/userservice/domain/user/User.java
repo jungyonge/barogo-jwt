@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -44,6 +46,9 @@ public class User {
     @Column(name = "activated")
     private boolean activated;
 
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
@@ -69,6 +74,7 @@ public class User {
         this.setPassword(password);
         this.setNickname(nickname);
         this.setActivated(true);
+        this.setUserStatus(UserStatus.JOINED);
         LocalDateTime now = LocalDateTime.now();
         this.setCreated(now);
         this.setLastLoggedIn(now);
@@ -106,5 +112,9 @@ public class User {
 
     private void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    private void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }

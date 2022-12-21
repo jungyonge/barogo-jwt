@@ -6,7 +6,7 @@ public interface UserRepository {
 
     User save(User user);
 
-    Optional<User> getUserByUserId(String userId);
+    Optional<User> getUserByUsername(String username);
 
     Optional<User> getUserByNickname(String nickname);
 }

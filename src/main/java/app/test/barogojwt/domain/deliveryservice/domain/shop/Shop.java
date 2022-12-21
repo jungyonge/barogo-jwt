@@ -1,5 +1,6 @@
-package app.test.barogojwt.domain.deliveryservice.domain.delivery;
+package app.test.barogojwt.domain.deliveryservice.domain.shop;
 
+import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryStatus;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,26 +14,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "`delivery`")
+@Table(name = "`shop`")
 @Getter
 @NoArgsConstructor
-public class Delivery {
+public class Shop {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String shopName;
+
+    private String shopAddress;
+
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
-
-    private String deliveryAddress;
-
-    private long shopId;
-
-    private long userId;
-
-    private LocalDateTime expectCookTime;
 
     private LocalDateTime created;
 

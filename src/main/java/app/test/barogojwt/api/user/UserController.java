@@ -8,6 +8,7 @@ import app.test.barogojwt.api.user.response.TokenDto;
 import app.test.barogojwt.config.jwt.JwtFilter;
 import app.test.barogojwt.config.jwt.TokenProvider;
 import app.test.barogojwt.domain.userservice.application.user.CreateUserHandler;
+import app.test.barogojwt.domain.userservice.application.user.LoginUserHandler;
 import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,16 @@ public class UserController {
 
     private final CreateUserHandler createUserHandler;
 
+    private final LoginUserHandler loginUserHandler;
+
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public UserController(CreateUserHandler createUserHandler, TokenProvider tokenProvider,
+    public UserController(CreateUserHandler createUserHandler, LoginUserHandler loginUserHandler,
+            TokenProvider tokenProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.createUserHandler = createUserHandler;
+        this.loginUserHandler = loginUserHandler;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
@@ -41,10 +46,10 @@ public class UserController {
     public ResponseEntity<UserDto> signup(
             @Valid @RequestBody SignupRequest signupRequest) {
 
-        createUserHandler.createUser(signupRequest.getUserId(),
+        createUserHandler.createUser(signupRequest.getUsername(),
                 signupRequest.getPassword(), signupRequest.getNickname());
 
-        return ResponseEntity.ok(new UserDto(signupRequest.getUserId(),
+        return ResponseEntity.ok(new UserDto(signupRequest.getUsername(),
                 signupRequest.getNickname()));
     }
 
@@ -52,12 +57,14 @@ public class UserController {
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginRequest loginRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUserId(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.createToken(authentication);
+
+        loginUserHandler.loginUser(loginRequest.getUsername());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

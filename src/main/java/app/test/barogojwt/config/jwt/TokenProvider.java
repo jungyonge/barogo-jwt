@@ -1,5 +1,6 @@
 package app.test.barogojwt.config.jwt;
 
+import app.test.barogojwt.config.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,11 +30,16 @@ public class TokenProvider implements InitializingBean {
    private final long tokenValidityInMilliseconds;
    private Key key;
 
+   private final UserDetailsService userDetailsService;
+
+
    public TokenProvider(
       @Value("${jwt.secret}") String secret,
-      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+           UserDetailsService userDetailsService) {
       this.secret = secret;
       this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+      this.userDetailsService = userDetailsService;
    }
 
    @Override

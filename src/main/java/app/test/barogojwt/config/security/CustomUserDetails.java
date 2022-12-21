@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class CustomUserDetails implements UserDetails {
 
     private long id;
-    private String userId;
+    private String username;
     private String nickname;
     private String password;
 
@@ -26,12 +26,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.userId;
+        return this.username;
     }
 
     @Override

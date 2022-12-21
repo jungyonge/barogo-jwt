@@ -22,35 +22,32 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return userRepository.getUserByUserId(userId)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.getUserByUsername(username)
                 .map(user -> {
-                    return createUser(userId, user);
+                    return createUser(username, user);
                 })
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 
-    private org.springframework.security.core.userdetails.User createUser(String userId,
+    private CustomUserDetails createUser(String username,
             User user) {
         if (!user.isActivated()) {
-            log.error(userId + " -> 활성화되어 있지 않습니다.");
-            throw new RuntimeException(userId + " -> 활성화되어 있지 않습니다.");
+            log.error(username + " -> 활성화되어 있지 않습니다.");
+            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
         }
 
         if (user.getUserStatus().equals(UserStatus.USER_WITHDRAWAL)) {
-            log.error(userId + " -> 관리자에 의해 계정 정지가 되어 있습니다.");
-            throw new RuntimeException(userId + " -> 관리자에 의해 계정 정지가 되어 있습니다.");
+            log.error(username + " -> 관리자에 의해 계정 정지가 되어 있습니다.");
+            throw new RuntimeException(username + " -> 관리자에 의해 계정 정지가 되어 있습니다.");
         }
 
         List<UserRole> roles = user.getRoles().stream()
                 .map(role -> new UserRole(role.getId(), role.getName(), role.getCreated()))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return new org.springframework.security.core.userdetails.User(user.getUserId(),
-                user.getPassword(),
-                roles);
+        return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), roles);
     }
 }

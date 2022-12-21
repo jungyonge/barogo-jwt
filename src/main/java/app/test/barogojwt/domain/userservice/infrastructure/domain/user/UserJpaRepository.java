@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserJpaRepository extends CrudRepository<User, Long> {
 
-    Optional<User> findUserByUserId(String userId);
+    Optional<User> findUserByUsername(String username);
 
     Optional<User> findByNickname(String nickname);
 

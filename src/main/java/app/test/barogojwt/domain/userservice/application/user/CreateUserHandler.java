@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateUserHandler {
@@ -26,10 +27,11 @@ public class CreateUserHandler {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean createUser(String userId, String password, String nickname) {
-        var user = User.create(userId, passwordEncoder.encode(password), nickname);
+    @Transactional
+    public boolean createUser(String username, String password, String nickname) {
+        var user = User.create(username, passwordEncoder.encode(password), nickname);
 
-        if (userRepository.getUserByUserId(userId).isPresent()) {
+        if (userRepository.getUserByUsername(username).isPresent()) {
             throw new DomainValidationException(UserDomainValidationMessage.USER_ID_ALREADY_EXIST);
         }
 

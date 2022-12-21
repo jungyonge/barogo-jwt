@@ -19,10 +19,9 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.save(user);
     }
 
-
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return userJpaRepository.findByUsername(username);
+    public Optional<User> getUserByUserId(String userId) {
+        return userJpaRepository.findUserByUserId(userId);
     }
 
     @Override

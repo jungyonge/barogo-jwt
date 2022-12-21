@@ -30,12 +30,12 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
-    @Column(name = "username", length = 50, unique = true)
-    private String username;
+    @Column(name = "user_id", length = 50, unique = true)
+    private String userId;
 
     @Column(name = "password", length = 100)
     private String password;
@@ -50,7 +50,7 @@ public class User {
     private UserStatus userStatus;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id")},
+    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles = new ArrayList<>();
 
@@ -68,9 +68,9 @@ public class User {
         this.roles.add(role);
     }
 
-    public User(String username, String password, String nickname){
+    public User(String userId, String password, String nickname) {
 
-        this.setUsername(username);
+        this.setUserId(userId);
         this.setPassword(password);
         this.setNickname(nickname);
         this.setActivated(true);
@@ -81,12 +81,12 @@ public class User {
     }
 
 
-    public static User create(String username, String password, String nickname) {
-        return new User(username, password, nickname);
+    public static User create(String userId, String password, String nickname) {
+        return new User(userId, password, nickname);
     }
 
-    private void setUsername(String username) {
-        this.username = username;
+    private void setUserId(String userId) {
+        this.userId = userId;
     }
 
     private void setPassword(String password) {

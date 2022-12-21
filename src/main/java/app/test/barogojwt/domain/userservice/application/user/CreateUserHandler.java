@@ -29,7 +29,7 @@ public class CreateUserHandler {
     public boolean createUser(String userId, String password, String nickname) {
         var user = User.create(userId, passwordEncoder.encode(password), nickname);
 
-        if (userRepository.getUserByUsername(userId).isPresent()) {
+        if (userRepository.getUserByUserId(userId).isPresent()) {
             throw new DomainValidationException(UserDomainValidationMessage.USER_ID_ALREADY_EXIST);
         }
 

@@ -79,7 +79,10 @@ public class TokenProvider implements InitializingBean {
 
       User principal = new User(claims.getSubject(), "", authorities);
 
-      return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+      CustomUserDetails customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(
+              principal.getUsername());
+
+      return new UsernamePasswordAuthenticationToken(customUserDetails, token, authorities);
    }
 
    public boolean validateToken(String token) {

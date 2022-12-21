@@ -14,6 +14,7 @@ public class CustomUserDetails implements UserDetails {
 
     private long id;
     private String username;
+
     private String nickname;
     private String password;
 

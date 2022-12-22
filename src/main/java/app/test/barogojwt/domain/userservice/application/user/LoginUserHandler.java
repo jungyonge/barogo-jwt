@@ -37,7 +37,7 @@ public class LoginUserHandler {
                         .map(role -> role.getName().getValue())
                         .collect(Collectors.joining(",")));
             }else {
-                throw new DomainValidationException(UserDomainValidationMessage.USER_NOT_FOUND_OR_PASSWORD_WRONG)
+                throw new DomainValidationException(UserDomainValidationMessage.USER_NOT_FOUND_OR_PASSWORD_WRONG);
             }
             return jwt;
         }).orElseThrow(() -> new DomainValidationException(UserDomainValidationMessage.USER_NOT_FOUND_OR_PASSWORD_WRONG));

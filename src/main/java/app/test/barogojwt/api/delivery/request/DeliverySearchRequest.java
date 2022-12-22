@@ -23,5 +23,7 @@ public class DeliverySearchRequest {
 
     private long shopId;
 
+    private String deliveryStatus;
+
 
 }

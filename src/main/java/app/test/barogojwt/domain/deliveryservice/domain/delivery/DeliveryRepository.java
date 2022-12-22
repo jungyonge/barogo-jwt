@@ -1,11 +1,12 @@
 package app.test.barogojwt.domain.deliveryservice.domain.delivery;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface DeliveryRepository {
 
     Delivery save(Delivery delivery);
 
-    Optional<Delivery> getDeliveryById(long id);
+    List<Delivery> getDeliveryBySpec(long userId, long shopId, String status , LocalDateTime searchStartDate, LocalDateTime searchEndDate);
 
 }

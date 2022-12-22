@@ -32,8 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 
-    private CustomUserDetails createUser(String username,
-            User user) {
+    private CustomUserDetails createUser(String username, User user) {
         if (!user.isActivated()) {
             log.error(username + " -> 활성화되어 있지 않습니다.");
             throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
@@ -48,6 +47,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .map(role -> new UserRole(role.getId(), role.getName(), role.getCreated()))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), roles);
+        return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), "", roles);
     }
 }

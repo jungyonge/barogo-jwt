@@ -48,16 +48,14 @@ public class TokenProvider implements InitializingBean {
       this.key = Keys.hmacShaKeyFor(keyBytes);
    }
 
-   public String createToken(Authentication authentication) {
-      String authorities = authentication.getAuthorities().stream()
-         .map(GrantedAuthority::getAuthority)
-         .collect(Collectors.joining(","));
+   public String createToken(String username, String authorities) {
+
 
       long now = (new Date()).getTime();
       Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
       return Jwts.builder()
-         .setSubject(authentication.getName())
+         .setSubject(username)
          .claim(AUTHORITIES_KEY, authorities)
          .signWith(key, SignatureAlgorithm.HS512)
          .setExpiration(validity)

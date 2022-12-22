@@ -19,7 +19,8 @@ public class DeliveryController {
 
     @GetMapping
     @Secured({"ROLE_NORMAL_USER"})
-    public String getDelivery(@AuthenticationPrincipal CustomUserDetails customUserDetails, @Valid @RequestBody DeliverySearchRequest deliveryRequest){
+    public String getDelivery(CustomUserDetails customUserDetails, @Valid @RequestBody DeliverySearchRequest deliveryRequest){
+
 
         System.out.println(customUserDetails);
 

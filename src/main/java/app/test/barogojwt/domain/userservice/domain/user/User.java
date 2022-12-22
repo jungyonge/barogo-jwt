@@ -49,8 +49,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
+
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "id")},
+    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles = new ArrayList<>();
 
@@ -72,21 +75,30 @@ public class User {
         this.setLastLoggedIn(LocalDateTime.now());
     }
 
-    public User(String username, String password, String nickname) {
+    public User(String username, String password, String nickname, UserType usertype) {
 
         this.setUsername(username);
         this.setPassword(password);
         this.setNickname(nickname);
         this.setActivated(true);
         this.setUserStatus(UserStatus.JOINED);
+        this.setUserType(usertype);
         LocalDateTime now = LocalDateTime.now();
         this.setCreated(now);
         this.setLastLoggedIn(now);
     }
 
+    public static User create(String username, String password, String nickname, String usertype) {
+        UserType type = null;
 
-    public static User create(String username, String password, String nickname) {
-        return new User(username, password, nickname);
+        if(usertype.equals(UserType.ADMIN.getValue())){
+            type = UserType.ADMIN;
+        }else if(usertype.equals(UserType.COURIER.getValue())){
+            type = UserType.COURIER;
+        } else if (usertype.equals(UserType.SHOP_OWNER.getValue())) {
+            type = UserType.SHOP_OWNER;
+        }
+        return new User(username, password, nickname, type);
     }
 
     private void setUsername(String username) {
@@ -120,5 +132,9 @@ public class User {
 
     private void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    private void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

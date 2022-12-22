@@ -47,7 +47,7 @@ public class UserController {
             @Valid @RequestBody SignupRequest signupRequest) {
 
         createUserHandler.createUser(signupRequest.getUsername(),
-                signupRequest.getPassword(), signupRequest.getNickname());
+                signupRequest.getPassword(), signupRequest.getNickname(), signupRequest.getUsertype());
 
         return ResponseEntity.ok(new UserDto(signupRequest.getUsername(),
                 signupRequest.getNickname()));
@@ -56,15 +56,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginRequest loginRequest) {
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = tokenProvider.createToken(authentication);
-
-        loginUserHandler.loginUser(loginRequest.getUsername());
+        String jwt = loginUserHandler.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

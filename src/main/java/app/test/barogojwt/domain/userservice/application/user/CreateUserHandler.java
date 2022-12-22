@@ -28,8 +28,8 @@ public class CreateUserHandler {
     }
 
     @Transactional
-    public boolean createUser(String username, String password, String nickname) {
-        var user = User.create(username, passwordEncoder.encode(password), nickname);
+    public boolean createUser(String username, String password, String nickname, String usertype) {
+        var user = User.create(username, passwordEncoder.encode(password), nickname, usertype);
 
         if (userRepository.getUserByUsername(username).isPresent()) {
             throw new DomainValidationException(UserDomainValidationMessage.USER_ID_ALREADY_EXIST);

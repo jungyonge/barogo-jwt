@@ -17,6 +17,8 @@ public enum UserDomainValidationMessage implements ExplainableMessage {
     NICKNAME_ALREADY_EXIST(1_0005, "이미 존재하는 닉네임입니다."),
     ROLE_DOES_NOT_EXIST(1_0006, "권한이 존재하지 않습니다."),
     USER_NOT_FOUND(1_0006, "사용자가 존재하지 않습니다."),
+    USER_NOT_FOUND_OR_PASSWORD_WRONG(1_0007, "사용자가 존재하지 않거나 비밀번호가 틀렸습니다."),
+
     ;
 
     private final int code;

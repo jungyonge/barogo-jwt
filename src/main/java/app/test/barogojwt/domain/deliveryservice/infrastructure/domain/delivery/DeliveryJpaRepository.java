@@ -15,4 +15,6 @@ public interface DeliveryJpaRepository extends CrudRepository<Delivery, Long>, J
 
     List<Delivery> findAll(Specification<Delivery> spec);
 
+
+
 }

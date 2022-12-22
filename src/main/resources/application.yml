@@ -29,4 +29,11 @@ jwt:
 
 logging:
   level:
-    me.silvernine: ERROR
+    barogo: debug
+
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+    include-exception: false
+    include-stacktrace: never

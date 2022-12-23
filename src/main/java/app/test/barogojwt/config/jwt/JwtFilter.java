@@ -1,6 +1,5 @@
 package app.test.barogojwt.config.jwt;
 
-import app.test.barogojwt.api.authorization.response.TokenDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -39,16 +38,16 @@ public class JwtFilter extends GenericFilterBean {
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
          } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
-            servletRequest.setAttribute("exception", JwtValidationMessage.UNKNOWN_JWT_TOKEN.getMessage());
+            servletRequest.setAttribute("exception", JwtDomainValidationMessage.UNKNOWN_JWT_TOKEN.getMessage());
          }
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-         servletRequest.setAttribute("exception", JwtValidationMessage.WRONG_TYPE_JWT_TOKEN.getMessage());
+         servletRequest.setAttribute("exception", JwtDomainValidationMessage.WRONG_TYPE_JWT_TOKEN.getMessage());
       } catch (ExpiredJwtException e) {
-         servletRequest.setAttribute("exception", JwtValidationMessage.EXPIRED_JWT_TOKEN.getMessage());
+         servletRequest.setAttribute("exception", JwtDomainValidationMessage.EXPIRED_JWT_TOKEN.getMessage());
       } catch (UnsupportedJwtException e) {
-         servletRequest.setAttribute("exception", JwtValidationMessage.UNSUPPORTED_JWT_TOKEN.getMessage());
+         servletRequest.setAttribute("exception", JwtDomainValidationMessage.UNSUPPORTED_JWT_TOKEN.getMessage());
       } catch (IllegalArgumentException e) {
-         servletRequest.setAttribute("exception", JwtValidationMessage.WRONG_JWT_TOKEN.getMessage());
+         servletRequest.setAttribute("exception", JwtDomainValidationMessage.WRONG_JWT_TOKEN.getMessage());
       }
 
       filterChain.doFilter(servletRequest, servletResponse);

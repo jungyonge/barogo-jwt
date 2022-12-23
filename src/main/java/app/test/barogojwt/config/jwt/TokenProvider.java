@@ -1,6 +1,8 @@
 package app.test.barogojwt.config.jwt;
 
 import app.test.barogojwt.config.security.CustomUserDetails;
+import app.test.barogojwt.domain.userservice.domain.UserDomainValidationMessage;
+import app.test.barogojwt.support.domain.DomainValidationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -132,9 +134,11 @@ public class TokenProvider implements InitializingBean {
       }
    }
 
-   public String regenerationAccessToken(Authentication authentication, String refreshToken){
+   public String regenerationAccessToken(String accessToken, String refreshToken){
 
       try {
+         Authentication authentication = getAuthentication(accessToken);
+
          validateRefreshToken(refreshToken);
          String username = authentication.getName();
          String authorities =  authentication.getAuthorities().stream()
@@ -143,16 +147,16 @@ public class TokenProvider implements InitializingBean {
          return createAccessToken(username,authorities);
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
          logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
-         throw e;
+         throw new DomainValidationException(JwtDomainValidationMessage.WRONG_JWT_TOKEN);
       } catch (ExpiredJwtException e) {
          logger.info("JWT : " + refreshToken + " 만료된 JWT 토큰입니다.");
-         throw e;
+         throw new DomainValidationException(JwtDomainValidationMessage.EXPIRED_JWT_TOKEN);
       } catch (UnsupportedJwtException e) {
          logger.info("JWT : " + refreshToken + " 지원되지 않는 JWT 토큰입니다.");
-         throw e;
+         throw new DomainValidationException(JwtDomainValidationMessage.UNSUPPORTED_JWT_TOKEN);
       } catch (IllegalArgumentException e) {
          logger.info("JWT : " + refreshToken + " JWT 토큰이 잘못되었습니다.");
-         throw e;
+         throw new DomainValidationException(JwtDomainValidationMessage.WRONG_TYPE_JWT_TOKEN);
       }
 
 

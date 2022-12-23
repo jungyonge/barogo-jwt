@@ -40,10 +40,8 @@ public class AuthorizationController {
     @PostMapping("/regeneration")
     public ResponseEntity<TokenDto> regenerationAccessToken(@RequestBody NewAccessTokenRequest newAccessTokenRequest) {
 
-        Authentication authentication = tokenProvider.getAuthentication(newAccessTokenRequest.getAccess_token());
-
         String newAccessToken = tokenProvider.regenerationAccessToken(
-                authentication, newAccessTokenRequest.getRefresh_token());
+                newAccessTokenRequest.getAccess_token(), newAccessTokenRequest.getRefresh_token());
         TokenDto tokenDto = new TokenDto(newAccessToken, newAccessTokenRequest.getRefresh_token());
 
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);

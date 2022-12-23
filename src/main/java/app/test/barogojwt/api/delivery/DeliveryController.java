@@ -45,7 +45,6 @@ public class DeliveryController {
     public List<DeliveryDto> getDelivery(CustomUserDetails customUserDetails,
             @Valid @RequestBody DeliverySearchRequest deliveryRequest) {
 
-
         var results = getDeliveryHandler.getDelivery(customUserDetails.getId(),
                 deliveryRequest.getShopId(), deliveryRequest.getDeliveryStatus(),
                 deliveryRequest.getSearchStartDateTime(), deliveryRequest.getSearchEndDateTime());

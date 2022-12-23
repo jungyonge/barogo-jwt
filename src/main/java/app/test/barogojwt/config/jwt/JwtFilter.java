@@ -1,5 +1,6 @@
 package app.test.barogojwt.config.jwt;
 
+import app.test.barogojwt.api.authorization.response.TokenDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class JwtFilter extends GenericFilterBean {
@@ -28,12 +28,12 @@ public class JwtFilter extends GenericFilterBean {
    @Override
    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-      String jwt = resolveToken(httpServletRequest);
+      TokenDto tokenDto = resolveToken(httpServletRequest);
       String requestURI = httpServletRequest.getRequestURI();
 
       try{
-         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
+         if (tokenDto != null && tokenProvider.validateAccessToken(tokenDto)) {
+            Authentication authentication = tokenProvider.getAuthentication(tokenDto.getAccess_token());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
          } else {
@@ -41,27 +41,24 @@ public class JwtFilter extends GenericFilterBean {
             servletRequest.setAttribute("exception", JwtValidationMessage.UNKNOWN_JWT_TOKEN.getMessage());
          }
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-         logger.info("JWT : " + jwt + " 잘못된 JWT 서명입니다.");
          servletRequest.setAttribute("exception", JwtValidationMessage.WRONG_TYPE_JWT_TOKEN.getMessage());
       } catch (ExpiredJwtException e) {
-         logger.info("JWT : " + jwt + " 만료된 JWT 토큰입니다.");
          servletRequest.setAttribute("exception", JwtValidationMessage.EXPIRED_JWT_TOKEN.getMessage());
       } catch (UnsupportedJwtException e) {
-         logger.info("JWT : " + jwt + " 지원되지 않는 JWT 토큰입니다.");
          servletRequest.setAttribute("exception", JwtValidationMessage.UNSUPPORTED_JWT_TOKEN.getMessage());
       } catch (IllegalArgumentException e) {
-         logger.info("JWT : " + jwt + " JWT 토큰이 잘못되었습니다.");
          servletRequest.setAttribute("exception", JwtValidationMessage.WRONG_JWT_TOKEN.getMessage());
       }
 
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
-   private String resolveToken(HttpServletRequest request) {
-      String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+   private TokenDto resolveToken(HttpServletRequest request) {
+      String access_token = request.getHeader("access_token");
+      String refresh_token = request.getHeader("refresh_token");
 
-      if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-         return bearerToken.substring(7);
+      if(access_token != null && refresh_token != null){
+         return new TokenDto(access_token, refresh_token);
       }
 
       return null;

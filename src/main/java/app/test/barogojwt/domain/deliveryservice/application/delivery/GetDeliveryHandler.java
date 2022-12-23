@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GetDeliveryHandler {
@@ -20,6 +21,7 @@ public class GetDeliveryHandler {
         this.deliveryRepository = deliveryRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Delivery> getDelivery(long userId, long shopId,
             String status , LocalDate searchStartDate, LocalDate searchEndDate){
 

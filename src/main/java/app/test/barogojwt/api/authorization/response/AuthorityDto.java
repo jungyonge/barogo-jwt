@@ -1,4 +1,4 @@
-package app.test.barogojwt.api.user.response;
+package app.test.barogojwt.api.authorization.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

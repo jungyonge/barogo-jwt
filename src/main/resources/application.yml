@@ -23,9 +23,14 @@ spring:
 jwt:
   header: Authorization
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-  #echo 'jungyong-coding-test-spring-boot-jwt-secret-jungyong-coding-test-spring-boot-jwt-secret-2022-12-20'|base64
-  secret: anVuZ3lvbmctY29kaW5nLXRlc3Qtc3ByaW5nLWJvb3Qtand0LXNlY3JldC1qdW5neW9uZy1jb2RpbmctdGVzdC1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LTIwMjItMTItMjAK
-  token-validity-in-seconds: 86400
+  #echo 'jungyong-coding-test-spring-boot-jwt-secret-jungyong-coding-test-spring-boot-jwt-secret-2022-12-20-access'|base64
+  access-token-secret: anVuZ3lvbmctY29kaW5nLXRlc3Qtc3ByaW5nLWJvb3Qtand0LXNlY3JldC1qdW5neW9uZy1jb2RpbmctdGVzdC1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LTIwMjItMTItMjAtYWNjZXNzCg==
+  #echo 'jungyong-coding-test-spring-boot-jwt-secret-jungyong-coding-test-spring-boot-jwt-secret-2022-12-20-refresh'|base64
+  refresh-token-secret: anVuZ3lvbmctY29kaW5nLXRlc3Qtc3ByaW5nLWJvb3Qtand0LXNlY3JldC1qdW5neW9uZy1jb2RpbmctdGVzdC1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LTIwMjItMTItMjAtcmVmcmVzaAo=
+
+  access-token-validity-in-seconds: 1800
+  refresh-token-validity-in-seconds: 259200
+
 
 logging:
   level:

@@ -6,6 +6,7 @@ import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryReposit
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryStatus;
 import app.test.barogojwt.support.domain.DomainValidationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChangeDeliveryHandler {
@@ -16,6 +17,7 @@ public class ChangeDeliveryHandler {
         this.deliveryRepository = deliveryRepository;
     }
 
+    @Transactional
     public Delivery changeDeliveryAddress(long id, String deliveryAddress) {
         return deliveryRepository.getDeliveryById(id).map(delivery -> {
             if (DeliveryStatus.COURIER_QUEUEING.equals(delivery.getStatus())

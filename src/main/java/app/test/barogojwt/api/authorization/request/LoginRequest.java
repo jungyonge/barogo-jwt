@@ -1,4 +1,4 @@
-package app.test.barogojwt.api.user.request;
+package app.test.barogojwt.api.authorization.request;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

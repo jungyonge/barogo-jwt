@@ -138,9 +138,24 @@ public class TokenProvider implements InitializingBean {
 
    public String regenerationAccessToken(String accessToken, String refreshToken){
 
-      Jws<Claims> claims = validateRefreshToken(refreshToken);
-      return createAccessToken(claims.getBody().get("sub").toString(),
-              String.valueOf(claims.getBody().get("roles")));
+      try {
+         Jws<Claims> claims = validateRefreshToken(refreshToken);
+         return createAccessToken(claims.getBody().get("sub").toString(),
+                 String.valueOf(claims.getBody().get("roles")));
+      }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+         logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
+         throw e;
+      } catch (ExpiredJwtException e) {
+         logger.info("JWT : " + refreshToken + " 만료된 JWT 토큰입니다.");
+         throw e;
+      } catch (UnsupportedJwtException e) {
+         logger.info("JWT : " + refreshToken + " 지원되지 않는 JWT 토큰입니다.");
+         throw e;
+      } catch (IllegalArgumentException e) {
+         logger.info("JWT : " + refreshToken + " JWT 토큰이 잘못되었습니다.");
+         throw e;
+      }
+
 
    }
 }

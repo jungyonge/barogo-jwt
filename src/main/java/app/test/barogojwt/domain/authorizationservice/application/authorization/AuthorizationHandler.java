@@ -37,9 +37,7 @@ public class AuthorizationHandler {
                 accessToken = tokenProvider.createAccessToken(user.getUsername(), user.getRoles().stream()
                         .map(role -> role.getName().getValue())
                         .collect(Collectors.joining(",")));
-                refreshToken = tokenProvider.createRefreshToken(user.getUsername(), user.getRoles().stream()
-                        .map(role -> role.getName().getValue())
-                        .collect(Collectors.joining(",")));
+                refreshToken = tokenProvider.createRefreshToken();
             }else {
                 throw new DomainValidationException(UserDomainValidationMessage.USER_NOT_FOUND_OR_PASSWORD_WRONG);
             }

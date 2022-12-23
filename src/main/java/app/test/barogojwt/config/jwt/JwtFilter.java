@@ -14,13 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class JwtFilter extends GenericFilterBean {
 
    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
    public static final String AUTHORIZATION_HEADER = "Authorization";
-   private TokenProvider tokenProvider;
+   private final TokenProvider tokenProvider;
    public JwtFilter(TokenProvider tokenProvider) {
       this.tokenProvider = tokenProvider;
    }
@@ -28,12 +29,12 @@ public class JwtFilter extends GenericFilterBean {
    @Override
    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-      TokenDto tokenDto = resolveToken(httpServletRequest);
+      String accessToken = resolveToken(httpServletRequest);
       String requestURI = httpServletRequest.getRequestURI();
 
       try{
-         if (tokenDto != null && tokenProvider.validateAccessToken(tokenDto)) {
-            Authentication authentication = tokenProvider.getAuthentication(tokenDto.getAccess_token());
+         if (StringUtils.hasText(accessToken) && tokenProvider.validateAccessToken(accessToken)) {
+            Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
          } else {
@@ -53,12 +54,11 @@ public class JwtFilter extends GenericFilterBean {
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
-   private TokenDto resolveToken(HttpServletRequest request) {
-      String access_token = request.getHeader("access_token");
-      String refresh_token = request.getHeader("refresh_token");
+   private String resolveToken(HttpServletRequest request) {
+      String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
-      if(access_token != null && refresh_token != null){
-         return new TokenDto(access_token, refresh_token);
+      if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+         return bearerToken.substring(7);
       }
 
       return null;

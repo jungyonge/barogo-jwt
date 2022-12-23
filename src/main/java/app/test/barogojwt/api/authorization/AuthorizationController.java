@@ -1,6 +1,7 @@
 package app.test.barogojwt.api.authorization;
 
 import app.test.barogojwt.api.authorization.request.LoginRequest;
+import app.test.barogojwt.api.authorization.request.NewAccessTokenRequest;
 import app.test.barogojwt.api.authorization.response.TokenDto;
 import app.test.barogojwt.config.jwt.TokenProvider;
 import app.test.barogojwt.domain.authorizationservice.application.authorization.AuthorizationHandler;
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -35,11 +37,14 @@ public class AuthorizationController {
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> createNewAccessToken(@RequestHeader HttpHeaders header) {
+    @PostMapping("/regeneration")
+    public ResponseEntity<TokenDto> regenerationAccessToken(@RequestBody NewAccessTokenRequest newAccessTokenRequest) {
 
-        String newAccessToken = tokenProvider.regenerationAccessToken(header.get("access_token").get(0),header.get("refresh_token").get(0));
-        TokenDto tokenDto = new TokenDto(newAccessToken, header.get("refresh_token").get(0));
+        Authentication authentication = tokenProvider.getAuthentication(newAccessTokenRequest.getAccess_token());
+
+        String newAccessToken = tokenProvider.regenerationAccessToken(
+                authentication, newAccessTokenRequest.getRefresh_token());
+        TokenDto tokenDto = new TokenDto(newAccessToken, newAccessTokenRequest.getRefresh_token());
 
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }

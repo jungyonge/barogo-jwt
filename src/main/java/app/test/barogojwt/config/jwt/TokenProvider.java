@@ -1,6 +1,5 @@
 package app.test.barogojwt.config.jwt;
 
-import app.test.barogojwt.api.authorization.response.TokenDto;
 import app.test.barogojwt.config.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -9,7 +8,6 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,14 +71,12 @@ public class TokenProvider implements InitializingBean {
          .compact();
    }
 
-   public String createRefreshToken(String username, String authorities) {
+   public String createRefreshToken() {
 
       long now = (new Date()).getTime();
       Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
 
       return Jwts.builder()
-              .setSubject(username)
-              .claim(AUTHORITIES_KEY, authorities)
               .signWith(refresh_key, SignatureAlgorithm.HS512)
               .setExpiration(validity)
               .compact();
@@ -108,19 +104,19 @@ public class TokenProvider implements InitializingBean {
       return new UsernamePasswordAuthenticationToken(customUserDetails, token, authorities);
    }
 
-   public boolean validateAccessToken(TokenDto tokenDto) {
+   public boolean validateAccessToken(String accessToken) {
       try {
-         Jwts.parserBuilder().setSigningKey(access_key).build().parseClaimsJws(tokenDto.getAccess_token());
+         Jwts.parserBuilder().setSigningKey(access_key).build().parseClaimsJws(accessToken);
          return true;
       }catch (Exception e) {
-         logger.info("JWT : " + tokenDto.getAccess_token() + "  JWT 검증 실패.");
+         logger.info("JWT : " + accessToken + "  JWT 검증 실패.");
          throw e;
       }
    }
 
-   public Jws<Claims> validateRefreshToken(String refreshToken) {
+   public void validateRefreshToken(String refreshToken) {
       try {
-         return Jwts.parserBuilder().setSigningKey(refresh_key).build().parseClaimsJws(refreshToken);
+         Jwts.parserBuilder().setSigningKey(refresh_key).build().parseClaimsJws(refreshToken);
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
          logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
          throw e;
@@ -136,12 +132,15 @@ public class TokenProvider implements InitializingBean {
       }
    }
 
-   public String regenerationAccessToken(String accessToken, String refreshToken){
+   public String regenerationAccessToken(Authentication authentication, String refreshToken){
 
       try {
-         Jws<Claims> claims = validateRefreshToken(refreshToken);
-         return createAccessToken(claims.getBody().get("sub").toString(),
-                 String.valueOf(claims.getBody().get("roles")));
+         validateRefreshToken(refreshToken);
+         String username = authentication.getName();
+         String authorities =  authentication.getAuthorities().stream()
+                 .map(GrantedAuthority::getAuthority)
+                 .collect(Collectors.joining(","));
+         return createAccessToken(username,authorities);
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
          logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
          throw e;

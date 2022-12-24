@@ -8,15 +8,19 @@ import app.test.barogojwt.config.security.CustomUserDetails;
 import app.test.barogojwt.domain.deliveryservice.application.delivery.ChangeDeliveryHandler;
 import app.test.barogojwt.domain.deliveryservice.application.delivery.GetDeliveryHandler;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.modelmapper.ModelMapper;
@@ -40,14 +44,17 @@ public class DeliveryController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
+    @GetMapping()
     @Secured({"ROLE_NORMAL_USER"})
     public List<DeliveryDto> getDelivery(CustomUserDetails customUserDetails,
-            @Valid @RequestBody DeliverySearchRequest deliveryRequest) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchStartDateTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate searchEndDateTime,
+            @RequestParam(required = false, defaultValue = "0") long shopId,
+            @RequestParam(required = false) String deliveryStatus) {
 
         var results = getDeliveryHandler.getDelivery(customUserDetails.getId(),
-                deliveryRequest.getShopId(), deliveryRequest.getDeliveryStatus(),
-                deliveryRequest.getSearchStartDateTime(), deliveryRequest.getSearchEndDateTime());
+                shopId, deliveryStatus,
+                searchStartDateTime, searchEndDateTime);
 
         Type listType = new TypeToken<List<DeliveryDto>>() {}.getType();
         List<DeliveryDto> list = modelMapper.map(results, listType);

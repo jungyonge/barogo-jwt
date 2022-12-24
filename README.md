@@ -33,15 +33,250 @@
 6.	API 명세서 작성이 가능하다면 같이 제공해주세요.
 ~~~
 
-## 개발환경
-- IntelliJ
-- JDK 11
-- Gradle
+## 개발 환경
+- 기본 환경
+    - IDE: IntelliJ IDEA
+    - OS: Mac
+    - GIT
+- Server
+    - Java11
+    - Spring Boot
+    - JPA
+    - gradle
+    - h2
 
-## 구동방법
+## 빌드. 실행
 Intellij 기준입니다.
 - 빌드 ```./gradlew clean build```
-- 구동 ```디버그 모드로 실행(control + D)```
+- 실행 ```디버그 모드로 실행(control + D)```
 
 ## 전체로직
 ![](./apilogic.png)
+
+## API 명세서 
+
+----
+### /api/v1/user
+회원 관련 API 요청요청 
+* **섦명**
+  
+  회원가입요청
+
+* **URL**
+
+  /api/v1/user/signup
+
+* **Method:**
+
+  `POST`
+
+* **URL Params**
+
+    None
+
+* **Data Params**
+
+  - username
+  - password
+  - nickname
+  - usertype
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+      **Content:** `{ username : "admin", nickname : "admin" }`
+
+* **Error Response:**
+
+    * **Code:** 500 BAD REQUEST <br />
+      **Content:** 
+    * `{
+      "errorCode": 10001,
+      "errorMessage": "이미 가입된 아이디 입니다."
+      }`
+----
+### /api/v1/authorization
+인증관련 요청
+* **설명**
+
+  로그인
+
+* **URL**
+
+  /api/v1/authorization/auth
+
+* **Method:**
+
+  `POST`
+
+* **URL Params**
+
+  None
+
+* **Data Params**
+
+  - username
+  - password
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+  * `{
+      "access_token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdW5neW9uZyIsImF1dGgiOiJST0.eugvzXbesInB4WlmLRA",
+      "refresh_token": "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjMzd9.5QmXRB5svPqmm_v74RqP9g4_gb4pTkmvRwLhQ"
+      }`
+
+* **Error Response:**
+
+  * **Code:** 500 BAD REQUEST <br />
+    **Content:**
+  * `{
+    "errorCode": 10007,
+    "errorMessage": "사용자가 존재하지 않거나 비밀번호가 틀렸습니다."
+    }`
+----- 
+
+* **설명**
+
+  access_token 재발급요청
+
+* **URL**
+
+  /api/v1/authorization/regeneration
+
+* **Method:**
+
+  `POST`
+
+* **URL Params**
+
+  None
+
+* **Data Params**
+
+  - access_token
+  - refresh_token
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+  * `{
+    "access_token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdW5neW9uZyIsImF1dGgiOiJST0.eugvzXbesInB4WlmLRA",
+    "refresh_token": "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjMzd9.5QmXRB5svPqmm_v74RqP9g4_gb4pTkmvRwLhQ"
+    }`
+
+* **Error Response:**
+
+  * **Code:** 500 BAD REQUEST <br />
+    **Content:**
+  * `{
+    "errorCode": 10006,
+    "errorMessage": "만료된 JWT refresh token 토큰입니다. 로그인을 다시 해주세요."
+    }`
+
+---- 
+### /api/v1/delivery
+배달관련 요청
+* **설명**
+
+  배달조회
+
+* **URL**
+
+  /api/v1/delivery
+
+* **Method:**
+
+  `GET`
+
+* **URL Params**
+
+  **Required:**
+
+  `searchStartDate=[yyyy-MM-dd]`
+
+  `searchEndDateTime=[yyyy-MM-dd]`
+
+  **Optional:**
+
+  `shopId=[long]`
+
+  `deliveryStatus=[String]`
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+  *`[
+    {
+    "id": 2,
+    "status": "COURIER_QUEUEING",
+    "deliveryAddress": "수원",
+    "shopId": 1,
+    "shopName": null,
+    "userId": 3,
+    "created": "2022-12-20 12:00:00",
+    "updated": "2022-12-20 12:00:00"
+    }
+  ]`
+
+* **Error Response:**
+
+  * **Code:** 500 BAD REQUEST <br />
+    **Content:**
+  * `{
+    "errorCode": 10001,
+    "errorMessage": "3일 이상은 조회가 불가능 합니다."
+    }`
+
+    
+---
+
+* **설명**
+
+  배달주소변경
+
+* **URL**
+
+  /api/v1/delivery/address
+
+* **Method:**
+
+  `POST`
+
+* **URL Params**
+
+  None
+
+* **Data Params**
+
+  - id
+  - newDeliveryAddress
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+  * 
+    `
+    {
+    "id": 2,
+    "deliveryAddress": "수원",
+    "shopId": 1,
+    }
+    `
+
+* **Error Response:**
+
+  * **Code:** 500 BAD REQUEST <br />
+    **Content:**
+  * `{
+    "errorCode": 10002,
+    "errorMessage": "배달원 배차 전에만 주소변경이 가능합니다."
+    }`

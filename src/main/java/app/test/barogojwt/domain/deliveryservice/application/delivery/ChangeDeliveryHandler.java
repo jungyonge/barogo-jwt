@@ -30,7 +30,7 @@ public class ChangeDeliveryHandler {
             throw new DomainValidationException(DeliveryDomainValidationMessage.NO_FOUND_SHOP);
         }
 
-        return deliveryRepository.getDeliveryById(id).map(delivery -> {
+        return deliveryRepository.getDeliveryByIdAndShopId(id, shopId).map(delivery -> {
             if (DeliveryStatus.COURIER_QUEUEING.equals(delivery.getStatus())
                     || DeliveryStatus.ORDER_PAYED.equals(delivery.getStatus())
                     || DeliveryStatus.ORDER_READY.equals(delivery.getStatus())) {

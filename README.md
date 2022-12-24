@@ -39,6 +39,9 @@
 - Gradle
 
 ## 구동방법
+Intellij 기준입니다.
+- 빌드 ```./gradlew clean build```
+- 구동 ```디버그 모드로 실행(control + D)```
 
 ## 전체로직
 ![](./apilogic.png)

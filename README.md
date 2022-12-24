@@ -191,6 +191,10 @@ Intellij 기준입니다.
 
   `GET`
 
+* **Header**
+
+  - access_token
+
 * **URL Params**
 
   **Required:**
@@ -249,6 +253,9 @@ Intellij 기준입니다.
 * **Method:**
 
   `POST`
+* **Header**
+
+  - access_token
 
 * **URL Params**
 

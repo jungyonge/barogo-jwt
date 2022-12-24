@@ -252,7 +252,7 @@ Intellij 기준입니다.
 
 * **Method:**
 
-  `POST`
+  `PUT`
 * **Header**
 
   - access_token

@@ -22,4 +22,9 @@ public class ShopRepositoryImpl implements ShopRepository {
     public Optional<Shop> getShopById(long id) {
         return shopJpaRepository.findShopById(id);
     }
+
+    @Override
+    public Optional<Shop> getShopByIdAndUserId(long id, long userId) {
+        return shopJpaRepository.findShopByIdAndUserId(id, userId);
+    }
 }

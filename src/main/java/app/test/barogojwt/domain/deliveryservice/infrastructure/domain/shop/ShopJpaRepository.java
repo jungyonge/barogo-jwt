@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface ShopJpaRepository extends CrudRepository<Shop, Long> {
 
     Optional<Shop> findShopById(long id);
+
+    Optional<Shop> findShopByIdAndUserId(long id, long userId);
 }

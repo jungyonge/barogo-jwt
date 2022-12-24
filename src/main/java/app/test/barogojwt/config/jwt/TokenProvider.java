@@ -111,7 +111,6 @@ public class TokenProvider implements InitializingBean {
          Jwts.parserBuilder().setSigningKey(access_key).build().parseClaimsJws(accessToken);
          return true;
       }catch (Exception e) {
-         logger.info("JWT : " + accessToken + "  JWT 검증 실패.");
          throw e;
       }
    }
@@ -119,17 +118,7 @@ public class TokenProvider implements InitializingBean {
    public void validateRefreshToken(String refreshToken) {
       try {
          Jwts.parserBuilder().setSigningKey(refresh_key).build().parseClaimsJws(refreshToken);
-      }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-         logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
-         throw e;
-      } catch (ExpiredJwtException e) {
-         logger.info("JWT : " + refreshToken + " 만료된 JWT 토큰입니다.");
-         throw e;
-      } catch (UnsupportedJwtException e) {
-         logger.info("JWT : " + refreshToken + " 지원되지 않는 JWT 토큰입니다.");
-         throw e;
-      } catch (IllegalArgumentException e) {
-         logger.info("JWT : " + refreshToken + " JWT 토큰이 잘못되었습니다.");
+      }catch (Exception e) {
          throw e;
       }
    }
@@ -146,16 +135,16 @@ public class TokenProvider implements InitializingBean {
                  .collect(Collectors.joining(","));
          return createAccessToken(username,authorities);
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-         logger.info("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
+         logger.error("JWT : " + refreshToken + " 잘못된 JWT 서명입니다.");
          throw new DomainValidationException(JwtDomainValidationMessage.WRONG_JWT_TOKEN);
       } catch (ExpiredJwtException e) {
-         logger.info("JWT : " + refreshToken + " 만료된 JWT 토큰입니다.");
-         throw new DomainValidationException(JwtDomainValidationMessage.EXPIRED_JWT_TOKEN);
+         logger.error("JWT : " + refreshToken + " 만료된 JWT 토큰입니다.");
+         throw new DomainValidationException(JwtDomainValidationMessage.EXPIRED_JWT_REFRESH_TOKEN);
       } catch (UnsupportedJwtException e) {
-         logger.info("JWT : " + refreshToken + " 지원되지 않는 JWT 토큰입니다.");
+         logger.error("JWT : " + refreshToken + " 지원되지 않는 JWT 토큰입니다.");
          throw new DomainValidationException(JwtDomainValidationMessage.UNSUPPORTED_JWT_TOKEN);
       } catch (IllegalArgumentException e) {
-         logger.info("JWT : " + refreshToken + " JWT 토큰이 잘못되었습니다.");
+         logger.error("JWT : " + refreshToken + " JWT 토큰이 잘못되었습니다.");
          throw new DomainValidationException(JwtDomainValidationMessage.WRONG_TYPE_JWT_TOKEN);
       }
 

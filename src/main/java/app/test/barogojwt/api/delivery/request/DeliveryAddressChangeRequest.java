@@ -11,6 +11,8 @@ public class DeliveryAddressChangeRequest {
 
     private long id;
 
+    private long shopId;
+
     private String newDeliveryAddress;
 
 

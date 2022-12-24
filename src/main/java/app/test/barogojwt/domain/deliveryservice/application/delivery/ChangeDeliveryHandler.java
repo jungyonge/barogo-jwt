@@ -4,6 +4,7 @@ import app.test.barogojwt.domain.deliveryservice.domain.DeliveryDomainValidation
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.Delivery;
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryRepository;
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryStatus;
+import app.test.barogojwt.domain.deliveryservice.domain.shop.ShopRepository;
 import app.test.barogojwt.support.domain.DomainValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +14,22 @@ public class ChangeDeliveryHandler {
 
     private final DeliveryRepository deliveryRepository;
 
-    public ChangeDeliveryHandler(DeliveryRepository deliveryRepository) {
+    private final ShopRepository shopRepository;
+
+    public ChangeDeliveryHandler(DeliveryRepository deliveryRepository,
+            ShopRepository shopRepository) {
         this.deliveryRepository = deliveryRepository;
+        this.shopRepository = shopRepository;
     }
 
     @Transactional
-    public Delivery changeDeliveryAddress(long id, String deliveryAddress) {
+    public Delivery changeDeliveryAddress(long id, long userId, long shopId, String deliveryAddress) {
+
+        var shop = shopRepository.getShopByIdAndUserId(id, userId);
+        if(shop.isEmpty()){
+            throw new DomainValidationException(DeliveryDomainValidationMessage.NO_FOUND_SHOP);
+        }
+
         return deliveryRepository.getDeliveryById(id).map(delivery -> {
             if (DeliveryStatus.COURIER_QUEUEING.equals(delivery.getStatus())
                     || DeliveryStatus.ORDER_PAYED.equals(delivery.getStatus())

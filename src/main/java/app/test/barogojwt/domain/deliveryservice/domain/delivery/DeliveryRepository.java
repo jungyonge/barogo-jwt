@@ -9,7 +9,9 @@ public interface DeliveryRepository {
 
     Delivery save(Delivery delivery);
 
-    Optional<Delivery> getDeliveryById(long id);
+    Optional<Delivery> getDeliveryByIdAndShopId(long id, long shopId);
+
+
 
     List<Delivery> getDeliveryBySpec(long userId, long shopId, String status , LocalDate searchStartDate, LocalDate searchEndDate);
 

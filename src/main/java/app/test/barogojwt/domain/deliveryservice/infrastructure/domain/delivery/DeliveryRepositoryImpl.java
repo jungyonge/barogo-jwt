@@ -2,13 +2,9 @@ package app.test.barogojwt.domain.deliveryservice.infrastructure.domain.delivery
 
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.Delivery;
 import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryRepository;
-import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryStatus;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,8 +25,8 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
     }
 
     @Override
-    public Optional<Delivery> getDeliveryById(long id) {
-        return deliveryJpaRepository.findDeliveryById(id);
+    public Optional<Delivery> getDeliveryByIdAndShopId(long id, long shopId) {
+        return deliveryJpaRepository.findDeliveryByIdAndShopId(id, shopId);
     }
 
     @Override

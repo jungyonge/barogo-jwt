@@ -35,9 +35,7 @@ public class JwtFilter extends GenericFilterBean {
          if (StringUtils.hasText(accessToken) && tokenProvider.validateAccessToken(accessToken)) {
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
          } else {
-            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
             servletRequest.setAttribute("exception", JwtDomainValidationMessage.UNKNOWN_JWT_TOKEN.getMessage());
          }
       }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {

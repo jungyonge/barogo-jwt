@@ -59,7 +59,10 @@ public class DeliveryController {
     @Secured({"ROLE_NORMAL_USER"})
     public ResponseEntity<DeliveryAddressChangeDto> changeAddress(CustomUserDetails customUserDetails ,@Valid @RequestBody DeliveryAddressChangeRequest deliveryAddressChangeRequest) {
 
-        var result = changeDeliveryHandler.changeDeliveryAddress(deliveryAddressChangeRequest.getId(),
+        var result = changeDeliveryHandler.changeDeliveryAddress(
+                deliveryAddressChangeRequest.getId(),
+                customUserDetails.getId(),
+                deliveryAddressChangeRequest.getShopId(),
                 deliveryAddressChangeRequest.getNewDeliveryAddress());
         return new ResponseEntity<>(new DeliveryAddressChangeDto(result.getId(), result.getDeliveryAddress(),
                 result.getShopId()), HttpStatus.OK);

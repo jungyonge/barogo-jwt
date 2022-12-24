@@ -39,3 +39,6 @@
 - Gradle
 
 ## 구동방법
+
+## 전체로직
+![](./apilogic.png)

@@ -8,4 +8,7 @@ public interface ShopRepository {
 
     Optional<Shop> getShopById(long id);
 
+    Optional<Shop> getShopByIdAndUserId(long id, long userId);
+
+
 }

@@ -24,6 +24,8 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long userId;
+
     private String shopName;
 
     private String shopAddress;

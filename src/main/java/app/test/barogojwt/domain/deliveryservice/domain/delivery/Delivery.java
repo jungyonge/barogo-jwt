@@ -41,10 +41,10 @@ public class Delivery {
     public Delivery(String deliveryAddress, long shopId,
             LocalDateTime expectCookTime){
         this.setDeliveryAddress(deliveryAddress);
+        this.setStatus(DeliveryStatus.ORDER_READY);
         this.setShopId(shopId);
         this.setExpectCookTime(expectCookTime);
         this.setCreated(LocalDateTime.now());
-
     }
 
     public static Delivery create(String deliveryAddress, long shopId, LocalDateTime expectCookTime){
@@ -55,6 +55,7 @@ public class Delivery {
 
     public void changeDeliveryAddress(String deliveryAddress){
         this.setDeliveryAddress(deliveryAddress);
+        this.setUpdated(LocalDateTime.now());
     }
 
     private void setStatus(DeliveryStatus status) {

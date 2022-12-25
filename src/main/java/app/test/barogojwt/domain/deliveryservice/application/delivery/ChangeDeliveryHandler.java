@@ -25,7 +25,7 @@ public class ChangeDeliveryHandler {
     @Transactional
     public Delivery changeDeliveryAddress(long id, long userId, long shopId, String deliveryAddress) {
 
-        var shop = shopRepository.getShopByIdAndUserId(id, userId);
+        var shop = shopRepository.getShopByIdAndUserId(shopId, userId);
         if(shop.isEmpty()){
             throw new DomainValidationException(DeliveryDomainValidationMessage.NO_FOUND_SHOP);
         }

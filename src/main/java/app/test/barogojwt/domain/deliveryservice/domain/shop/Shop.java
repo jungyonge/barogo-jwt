@@ -1,6 +1,5 @@
 package app.test.barogojwt.domain.deliveryservice.domain.shop;
 
-import app.test.barogojwt.domain.deliveryservice.domain.delivery.DeliveryStatus;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +30,7 @@ public class Shop {
     private String shopAddress;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus status;
+    private ShopStatus status;
 
     private LocalDateTime created;
 

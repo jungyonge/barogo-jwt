@@ -264,6 +264,7 @@ Intellij 기준입니다.
 * **Data Params**
 
   - id
+  - shopId
   - newDeliveryAddress
 
 * **Success Response:**

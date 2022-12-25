@@ -2,14 +2,12 @@ package app.test.barogojwt.api.user;
 
 import app.test.barogojwt.api.user.request.SignupRequest;
 import app.test.barogojwt.api.user.response.UserDto;
-
 import app.test.barogojwt.config.security.CustomUserDetails;
 import app.test.barogojwt.domain.userservice.application.user.CreateUserHandler;
 import app.test.barogojwt.domain.userservice.application.user.GetUserHandler;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,12 +33,12 @@ public class UserController {
     public ResponseEntity<UserDto> signup(
             @Valid @RequestBody SignupRequest signupRequest) {
 
-        createUserHandler.createUser(signupRequest.getUsername(),
+        var user = createUserHandler.createUser(signupRequest.getUsername(),
                 signupRequest.getPassword(), signupRequest.getNickname(),
                 signupRequest.getUsertype());
 
-        return ResponseEntity.ok(new UserDto(signupRequest.getUsername(),
-                signupRequest.getNickname()));
+        return ResponseEntity.ok(new UserDto(user.getUsername(),
+                user.getNickname()));
     }
 
     @GetMapping("/me")

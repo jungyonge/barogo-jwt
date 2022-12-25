@@ -28,7 +28,7 @@ public class CreateUserHandler {
     }
 
     @Transactional
-    public boolean createUser(String username, String password, String nickname, String usertype) {
+    public User createUser(String username, String password, String nickname, String usertype) {
         var user = User.create(username, passwordEncoder.encode(password), nickname, usertype);
 
         if (userRepository.getUserByUsername(username).isPresent()) {
@@ -48,9 +48,7 @@ public class CreateUserHandler {
                         UserDomainValidationMessage.ROLE_DOES_NOT_EXIST));
         user.addRole(normalUser);
 
-        userRepository.save(user);
-
-        return true;
+        return userRepository.save(user);
     }
 
     private boolean checkPassword(String password) {

@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum DeliveryDomainValidationMessage implements ExplainableMessage {
 
-    INVALID_SEARCH_DATE(1_0001, "3일 이상은 조회가 불가능 합니다."),
-    INVALID_CHANGE_DELIVERY_ADDRESS(1_0002, "배달원 배차 전에만 주소변경이 가능합니다."),
+    INVALID_SEARCH_DATE_PERIOD(1_0001, "3일 이상은 조회가 불가능 합니다."),
 
-    NO_FOUND_SHOP(1_0003, "가게 정보가 존재하지 않습니다."),
+    INVALID_SEARCH_START_DATE(1_0002, "조회종료일이 조회시작일보다 빠릅니다."),
+
+    INVALID_CHANGE_DELIVERY_ADDRESS(1_0003, "배달원 배차 전에만 주소변경이 가능합니다."),
+
+    NO_FOUND_SHOP(1_0004, "가게 정보가 존재하지 않습니다."),
 
 
 

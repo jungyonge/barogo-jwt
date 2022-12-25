@@ -1,7 +1,6 @@
 package app.test.barogojwt.domain.deliveryservice.domain.delivery;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

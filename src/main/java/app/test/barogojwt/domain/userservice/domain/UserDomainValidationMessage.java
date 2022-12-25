@@ -10,14 +10,14 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum UserDomainValidationMessage implements ExplainableMessage {
 
-    USER_ID_ALREADY_EXIST(1_0001, "이미 가입된 아이디 입니다."),
-    INVALID_PASSWORD(1_0002, "비밀번호 조건이 올바르지 않습니다."),
-    INVALID_NICKNAME(1_0003, "올바르지 않은 닉네임입니다."),
-    ROLE_ALREADY_EXIST(1_0004, "이미 존재하는 권한입니다."),
-    NICKNAME_ALREADY_EXIST(1_0005, "이미 존재하는 닉네임입니다."),
-    ROLE_DOES_NOT_EXIST(1_0006, "권한이 존재하지 않습니다."),
-    USER_NOT_FOUND(1_0006, "사용자가 존재하지 않습니다."),
-    USER_NOT_FOUND_OR_PASSWORD_WRONG(1_0007, "사용자가 존재하지 않거나 비밀번호가 틀렸습니다."),
+    USER_ID_ALREADY_EXIST(2_0001, "이미 가입된 아이디 입니다."),
+    INVALID_PASSWORD(2_0002, "비밀번호 조건이 올바르지 않습니다."),
+    INVALID_NICKNAME(2_0003, "올바르지 않은 닉네임입니다."),
+    ROLE_ALREADY_EXIST(2_0004, "이미 존재하는 권한입니다."),
+    NICKNAME_ALREADY_EXIST(2_0005, "이미 존재하는 닉네임입니다."),
+    ROLE_DOES_NOT_EXIST(2_0006, "권한이 존재하지 않습니다."),
+    USER_NOT_FOUND(2_0006, "사용자가 존재하지 않습니다."),
+    USER_NOT_FOUND_OR_PASSWORD_WRONG(2_0007, "사용자가 존재하지 않거나 비밀번호가 틀렸습니다."),
 
     ;
 

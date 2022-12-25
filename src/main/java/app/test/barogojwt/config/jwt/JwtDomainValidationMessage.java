@@ -15,7 +15,6 @@ public enum JwtDomainValidationMessage implements ExplainableMessage {
     UNSUPPORTED_JWT_TOKEN(1_0003, "지원되지 않는 JWT 토큰입니다."),
     WRONG_TYPE_JWT_TOKEN(1_0004, "JWT 토큰이 잘못되었습니다."),
     UNKNOWN_JWT_TOKEN(1_0005,"유효한 JWT 토큰이 없습니다"),
-
     EXPIRED_JWT_REFRESH_TOKEN(1_0006, "만료된 JWT refresh token 토큰입니다. 로그인을 다시 해주세요.")
 
             ;

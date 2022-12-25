@@ -1,7 +1,6 @@
 package app.test.barogojwt.api.delivery;
 
 import app.test.barogojwt.api.delivery.request.DeliveryAddressChangeRequest;
-import app.test.barogojwt.api.delivery.request.DeliverySearchRequest;
 import app.test.barogojwt.api.delivery.response.DeliveryAddressChangeDto;
 import app.test.barogojwt.api.delivery.response.DeliveryDto;
 import app.test.barogojwt.config.security.CustomUserDetails;
@@ -11,20 +10,18 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 
 @RestController
 @RequestMapping("/api/v1/delivery")
